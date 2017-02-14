@@ -3,6 +3,7 @@ package com.tientun.example;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.tientun.example.models.ResponseData;
 import com.tientun.example.api.RestClient;
@@ -21,12 +22,12 @@ public class MainActivity extends AppCompatActivity {
         RestClient.getClient(this).login("username", "password").enqueue(new Callback<ResponseData>() {
             @Override
             public void onResponse(Call<ResponseData> call, Response<ResponseData> response) {
-                Log.d("MainActivity", response.body().getData().toString());
+                Log.d("MainActivity", "login onResponse, " + response.body().getData().toString());
             }
 
             @Override
             public void onFailure(Call<ResponseData> call, Throwable t) {
-
+                Log.e("MainActivity", "login onFailure");
             }
         });
     }

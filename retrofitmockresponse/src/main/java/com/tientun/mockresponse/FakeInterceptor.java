@@ -85,12 +85,22 @@ public class FakeInterceptor implements Interceptor {
                 BufferedReader r = new BufferedReader(new InputStreamReader(is));
                 StringBuilder responseStringBuilder = new StringBuilder();
                 String line;
+                int code = -1;
                 while ((line = r.readLine()) != null) {
-                    responseStringBuilder.append(line).append('\n');
+                    Log.i(TAG, "code=" + code + ", line=" + line);
+                    if(code == -1){
+                        try {
+                            code = Integer.parseInt(line);
+                        }catch (NumberFormatException e){
+                            throw new RuntimeException("First line of response JSON file should contains response status code");
+                        }
+                    }else {
+                        responseStringBuilder.append(line).append('\n');
+                    }
                 }
                 Log.d(TAG, "Response: " + responseStringBuilder.toString());
                 response = new Response.Builder()
-                        .code(200)
+                        .code(code)
                         .message(responseStringBuilder.toString())
                         .request(chain.request())
                         .protocol(Protocol.HTTP_1_0)
